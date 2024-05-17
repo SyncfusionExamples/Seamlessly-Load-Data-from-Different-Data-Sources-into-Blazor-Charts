@@ -1,0 +1,21 @@
+﻿@page "/RemoteChart"
+
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Charts
+<h3>Chart with Remote Data</h3>
+<br />
+
+<SfChart Title="Food Vs Price" Theme="Syncfusion.Blazor.Theme.Material3">
+    <SfDataManager Url="https://blazor.syncfusion.com/services/production/api/chart" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries XName="FoodName" YName="Price" Type="ChartSeriesType.Column">
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Position="LabelPosition.Top">
+                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>

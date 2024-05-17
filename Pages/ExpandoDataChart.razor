@@ -1,0 +1,35 @@
+﻿@page "/ExpandoChart"
+
+@using System.Dynamic
+@using Syncfusion.Blazor.Charts
+<h3>Chart with Expando Object Data</h3>
+<br />
+
+<SfChart Title="Patient Heights" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryYAxis Minimum="150" Title="Height in cm" Maximum="180" Interval="5">
+    </ChartPrimaryYAxis>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Title="Patient Name">
+    </ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@PatientData" XName="Name" YName="Height" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    <!-- ExpandoObject data binding -->
+    string[] patientsName = new string[] { "Johnson Godwin", "Peter Jackman", "James Oliver", "Richard Joseph", "Robert George", "Kevin", "Alvin" };
+    double[] patientsHeight = new double[] { 176, 163.3, 177, 167, 178, 164, 176 };
+    public List<ExpandoObject> PatientData { get; set; } = new List<ExpandoObject>();
+    protected override void OnInitialized()
+    {
+        PatientData = Enumerable.Range(0, 6).Select((x) =>
+        {
+            dynamic data = new ExpandoObject();
+            data.Name = patientsName[x];
+            data.Height = patientsHeight[x];
+            return data;
+        }).Cast<ExpandoObject>().ToList<ExpandoObject>();
+    }
+    <!-- End of ExpandoObject data binding -->
+}

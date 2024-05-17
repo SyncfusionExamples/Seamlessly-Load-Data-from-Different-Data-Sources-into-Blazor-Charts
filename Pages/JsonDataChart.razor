@@ -1,0 +1,38 @@
+﻿@page "/JsonChart"
+<h3>Chart with Json Data</h3>
+<br />
+
+@using Syncfusion.Blazor.Charts
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<SfChart Title="Oil consumption report for the year 2017" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryYAxis Title="Capacity used (In Liters)">
+    </ChartPrimaryYAxis>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" Interval="1" IntervalType="IntervalType.Months" LabelFormat="MMM" Title="Oil used per month">
+    </ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@OilData" XName="Date" YName="CapacityUsed" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    public OilDetail[] OilData { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        OilData = new OilDetail[] { };
+        OilData = await Http.GetFromJsonAsync<OilDetail[]>(NavigationManager.BaseUri + "data/oildata.json");
+    }
+
+    public class OilDetail
+    {
+        public DateTime Date { get; set; }
+        public double CapacityUsed { get; set; }
+        public double CapacityAvailable { get; set; }
+        public double OverCapacity { get; set; }
+        public double TotalHours { get; set; }
+    }
+}

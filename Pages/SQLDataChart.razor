@@ -1,0 +1,69 @@
+﻿@page "/SqlChart"
+
+<h3>Chart with SQL Data</h3>
+<br />
+
+@using Syncfusion.Blazor.Charts
+@using System.Data.SqlClient
+
+<SfChart Title="Literacy Rate by Country" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1">
+        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+    </ChartPrimaryXAxis>
+    <ChartPrimaryYAxis LabelFormat="{value}%" Minimum="0" Maximum="100" Interval="25">
+        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        <ChartAxisMinorTickLines Width="0"></ChartAxisMinorTickLines>
+        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+    </ChartPrimaryYAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@LiteracyRateDetails" XName="Country" YName="Rate" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    private List<LiteracyRateModel> LiteracyRateDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ChartDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
+        string query = "SELECT * FROM LiteracyRate";
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            await connection.OpenAsync();
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    LiteracyRateDetails = new List<LiteracyRateModel>();
+
+                    while (await reader.ReadAsync())
+                    {
+                        LiteracyRateModel record = new LiteracyRateModel
+                            {
+                                Country = reader.GetString(1),
+                                Rate = reader.GetDouble(2),
+                            };
+
+                        LiteracyRateDetails.Add(record);
+                    }
+                }
+
+                await reader.CloseAsync();
+            }
+
+            await connection.CloseAsync();
+        }
+    }
+
+    public class LiteracyRateModel
+    {
+        public string Country { get; set; }
+        public double Rate { get; set; }
+    }
+}

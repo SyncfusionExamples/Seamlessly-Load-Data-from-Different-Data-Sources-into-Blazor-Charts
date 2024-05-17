@@ -1,0 +1,51 @@
+﻿@page "/ObservableChart"
+
+@using Syncfusion.Blazor.Charts
+@using System.Collections.ObjectModel;
+<h3>Chart with Observable Collection Data</h3>
+<br />
+
+<SfChart Title="Patient Heights" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryYAxis Minimum="150" Title="Height in cm" Maximum="180" Interval="5">
+    </ChartPrimaryYAxis>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Title="Patient Name">
+    </ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@PatientData" XName="Name" YName="Height" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+
+    
+
+    public class PatientDetail
+    {
+        public string Name { get; set; }
+
+        public double Height { get; set; }
+
+        public static ObservableCollection<PatientDetail> GetData()
+        {
+            ObservableCollection<PatientDetail> ChartPoints = new ObservableCollection<PatientDetail>()
+            {
+                new PatientDetail { Name = "Johnson Godwin", Height = 176 },
+                new PatientDetail { Name = "Peter Jackman", Height = 163.3 },
+                new PatientDetail { Name = "James Oliver", Height = 177 },
+                new PatientDetail { Name = "Richard Joseph", Height = 167 },
+                new PatientDetail { Name = "Robert George", Height = 178 },
+                new PatientDetail { Name = "Kevin", Height = 164 },
+                new PatientDetail { Name = "Alvin", Height = 176 },
+            };
+            return ChartPoints;
+        }
+    }
+
+    public ObservableCollection<PatientDetail> PatientData { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.PatientData = PatientDetail.GetData();
+    }
+}

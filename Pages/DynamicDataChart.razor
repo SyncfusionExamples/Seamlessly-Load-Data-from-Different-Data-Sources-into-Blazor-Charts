@@ -1,0 +1,54 @@
+﻿@page "/DynamicChart"
+
+@using System.Dynamic
+@using Syncfusion.Blazor.Charts
+<h3>Chart with Dynamic Object Data</h3>
+<br />
+
+<SfChart Title="Patient Heights" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryYAxis Minimum="150" Title="Height in cm" Maximum="180" Interval="5">
+    </ChartPrimaryYAxis>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Title="Patient Name">
+    </ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@PatientData" XName="Name" YName="Height" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    public class DynamicDictionary : DynamicObject
+    {
+        Dictionary<string, object> dictionary = new Dictionary<string, object>();
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            string name = binder.Name;
+            return dictionary.TryGetValue(name, out result);
+        }
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            dictionary[binder.Name] = value;
+            return true;
+        }
+
+        public override System.Collections.Generic.IEnumerable<string> GetDynamicMemberNames()
+        {
+            return this.dictionary?.Keys;
+        }
+    }
+    string[] patientsName = new string[] { "Johnson Godwin", "Peter Jackman", "James Oliver", "Richard Joseph", "Robert George", "Kevin", "Alvin" };
+    double[] patientsHeight = new double[] { 176, 163.3, 177, 167, 178, 164, 176 };
+    public List<DynamicDictionary> PatientData = new List<DynamicDictionary>() { };
+
+    protected override void OnInitialized()
+    {
+        PatientData = Enumerable.Range(0, 5).Select((x) =>
+        {
+            dynamic data = new DynamicDictionary();
+            data.Name = patientsName[x];
+            data.Height = patientsHeight[x];
+            return data;
+        }).Cast<DynamicDictionary>().ToList<DynamicDictionary>();
+    }
+}

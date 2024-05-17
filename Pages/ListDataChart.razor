@@ -1,0 +1,46 @@
+﻿@page "/ListChart"
+
+@using Syncfusion.Blazor.Charts
+<h3>Chart with List Data</h3>
+<br />
+
+<SfChart Title="Patient Heights" Theme="Syncfusion.Blazor.Theme.Material3">
+    <ChartPrimaryYAxis Minimum="150" Title="Height in cm" Maximum="180" Interval="5">
+    </ChartPrimaryYAxis>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Title="Patient Name">
+    </ChartPrimaryXAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@PatientData" XName="Name" YName="Height" Type="ChartSeriesType.Column">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    public class Patient
+    {
+        public Patient(string currentName, double currentHeight)
+        {
+            Name = currentName;
+            Height = currentHeight;
+        }
+
+        public string Name { get; set; }
+
+        public double Height { get; set; }
+    }
+
+    public List<Patient> PatientData { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PatientData = new List<Patient>();
+
+        PatientData.Add(new Patient("Johnson Godwin", 176));
+        PatientData.Add(new Patient("Peter Jackman", 163.3));
+        PatientData.Add(new Patient("James Oliver", 177));
+        PatientData.Add(new Patient("Richard Joseph", 167));
+        PatientData.Add(new Patient("Robert George", 178));
+        PatientData.Add(new Patient("Kevin", 164));
+        PatientData.Add(new Patient("Alvin", 176));
+    }
+}
