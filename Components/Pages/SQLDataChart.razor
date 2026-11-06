@@ -23,7 +23,7 @@
 </SfChart>
 
 @code {
-    private List<LiteracyRateModel> LiteracyRateDetails;
+    private List<LiteracyRateModel> LiteracyRateDetails = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,7 +40,7 @@
 
                 if (reader.HasRows)
                 {
-                    LiteracyRateDetails = new List<LiteracyRateModel>();
+                    LiteracyRateDetails.Clear();
 
                     while (await reader.ReadAsync())
                     {
