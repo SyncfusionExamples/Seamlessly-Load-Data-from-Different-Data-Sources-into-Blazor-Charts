@@ -4,7 +4,7 @@
 <br />
 
 @using Syncfusion.Blazor.Charts
-@using Microsoft.Data.SqlClient
+@using System.Data.SqlClient
 
 <SfChart Title="Literacy Rate by Country" Theme="Syncfusion.Blazor.Theme.Material3">
     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1">
@@ -23,7 +23,7 @@
 </SfChart>
 
 @code {
-    private List<LiteracyRateModel> LiteracyRateDetails;
+    private List<LiteracyRateModel> LiteracyRateDetails = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,7 +40,7 @@
 
                 if (reader.HasRows)
                 {
-                    LiteracyRateDetails = new List<LiteracyRateModel>();
+                    LiteracyRateDetails.Clear();
 
                     while (await reader.ReadAsync())
                     {
